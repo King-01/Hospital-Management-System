@@ -1,0 +1,19 @@
+{% extends 'healthcare/base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    {% if request.user.is_authenticated %}
+        {% if user.doctorprofile  %}
+
+        {% include 'healthcare/doctor.html' %}
+        {% elif user.userprofile %}
+        {% include 'healthcare/user.html' %}
+        {% elif user.is_superuser %}
+        {% include 'healthcare/admin.html' %}
+
+        {% endif %}
+    {% else %}
+    {% include 'healthcare/homepage.html' %}
+
+    {% endif %}
+{% endblock %}

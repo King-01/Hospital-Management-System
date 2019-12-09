@@ -1,0 +1,55 @@
+{% extends 'healthcare/base.html' %}
+{% block title %}Appointment{% endblock %}
+{% block body %}
+        {% if request.user.is_superuser or appointment.user == request.user or appointment.doctor == request.user.doctorprofile%}
+            <!-- <div class="container" style="background-color: rgba(249, 249, 249, 0.835); opacity:1"> -->
+            <center><h1 style="color: #dd5;">Appointment Details</h1>
+                <table class="rwd-table">
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ appointment.pk }}</td>
+                    </tr>
+                    <tr>
+                        <th>Patient Name</th>
+                        <td>{{ appointment.user.first_name }} {{ appointment.user.last_name }}</td>
+                    </tr>
+                    <tr onclick=window.location="{% url 'accounts:doctor-detail' appointment.doctor.pk %}">
+                        <th>Doctor Name</th>
+                        <td>{{ appointment.doctor.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Booking Time</th>
+                        <td>{{ appointment.booking_time }}</td>
+                    </tr>
+                    <tr>
+                        <th>Appointment Date</th>
+                        <td>{{ appointment.appointment_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Appointment Time</th>
+                        <td>{{ appointment.appointment_time }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ appointment.status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Prescription</th>
+                        <td>{{ appointment.prescription }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fee</th>
+                        <td>{{ appointment.fee }}</td>
+                    </tr>
+                </table>
+                {% if request.user.is_superuser %}
+                <center><button class="button-three" onclick="window.location.href='/admin/healthcare/appointment/{{ appointment.pk }}/change/'">Edit Appointment</button></center>
+                {% else %}
+                <center><button class="button-three" onclick="window.location.href='{% url 'healthcare:appointment-update' appointment.pk %}'">Edit Appointment</button></center>
+                {% endif %}
+        {% else %}
+              </center>
+
+            <p>You are not authorized to view this page!</p>
+        {% endif %}
+{% endblock %}

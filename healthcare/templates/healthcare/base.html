@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}HealthCareSys{% endblock %}</title>
+    {% load staticfiles %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/profile.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/main.css" %}" rel="stylesheet" type="text/css">
+    <script src="{% static "js/jquery.min.js" %}"></script>
+    <script src="{% static "js/jquery.easing.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/script.js" %}"></script>
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+    <section id="banner" class="banner">
+      <div class="bg-color">
+    <nav class="navbar navbar-default navbar-fixed-top" >
+      <div class="container">
+        <div class="col-md-12">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'healthcare:index' %}"><img src="{% static "img/logo.png" %}" class="img-responsive" style="width: 140px; margin-top: -30%;"></a>
+          </div>
+          <div class="collapse navbar-collapse navbar-right" id="myNavbar">
+            <ul class="nav navbar-nav">
+              {% if request.user.is_authenticated %}
+                {% if request.user.userprofile %}
+                <li class=""><a>₹{{ request.user.userprofile.amount }}</a></li>
+                {% else %}
+                <li class=""><a>₹{{ request.user.doctorprofile.amount }}</a></li>
+                {% endif %}
+                {% endif %}
+              {% if request.user.is_superuser %}
+              <li class=""><a href="/admin/">Admin</a></li>
+              {% elif not request.user.doctorprofile and request.user.is_authenticated %}
+              <li class=""><a href="{% url 'healthcare:search' %}">Search</a></li>
+              {% endif %}
+              {% if request.user.is_authenticated %}
+              <li class=""><a href="{% url 'healthcare:index' %}">Appointments</a></li>
+              <li class=""><a href="{% url 'healthcare:transactions' %}">Transactions</a></li>
+              {% else %}
+              <li class=""><a href="{% url 'accounts:register' %}">User Register</a></li>
+              {% endif %}
+              {% if request.user.is_authenticated and request.user.doctorprofile %}
+              <li class=""><a href="{% url 'accounts:doctor-detail' request.user.doctorprofile.pk %}">Profile</a></li>
+              {% elif request.user.is_authenticated and request.user.userprofile %}
+              <li class=""><a href="{% url 'accounts:user-detail' request.user.userprofile.pk %}">Profile</a></li>
+              {% elif not request.user.is_authenticated %}
+              <li class=""><a href="{% url 'accounts:home' %}?role=doctor">Doctor Registration</a></li>
+              {% endif %}
+              <li class="">
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'accounts:logout' %}">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">
+                        Login
+                    </a>
+                {% endif %}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="banner-info">
+          {% block body %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
