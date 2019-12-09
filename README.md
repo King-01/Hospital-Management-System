@@ -4,3 +4,4 @@ I worked mainly on Backend portion whereas Frontend was managed mainly by my oth
 Other Team Members-
 Abhishek Raj
 Abhishek
+Django -- 2.2
